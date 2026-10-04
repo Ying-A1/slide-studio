@@ -1,87 +1,76 @@
 # slide-studio
 
-> Build beautiful, **editable** slide decks by talking to an AI — then reorder, restyle, change type, and (optionally) drop in AI-generated backgrounds, all in the browser.
+Turn an AI-generated slide deck into something you can keep working on — edit text, change size · level · line-spacing, drag to reorder, add/delete slides, drop in art, export — all in the browser. **Generating it is the start, not the end.**
 
-**English** · [中文说明](README.zh-CN.md)
+**English** ·  [中文](README.zh-CN.md)
 
-`slide-studio` is a [Claude Code / Agent **Skill**](https://docs.claude.com/en/docs/claude-code/skills).
-It generates a single self-contained `.html` deck (fixed 16:9, zero dependencies) that ships with a real
-in-browser editor. It is a **superset of** Anthropic/Zara Zhang's [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides)
-skill — everything that does, plus the editing layer plain HTML decks never had — with slide-design rules
-distilled from the YouTube guide *"How to Vibe Code AI Slides"* by **Isa does AI**.
+---
 
-## Features
+## Why a "Studio"
 
-Everything `frontend-slides` has:
+Most "AI makes your slides" tools hand you a **dead file**: move one slide, change a font size, cut a line — and you're back re-prompting from scratch.
 
-- 🧱 **Zero dependencies** — one HTML file, inline CSS/JS, no build step.
-- 🎨 **"Show, don't tell" style discovery** — pick from generated visual previews; curated
-  [presets](references/STYLE_PRESETS.md) + a **34-template** [bold pack](bold-template-pack/).
-- 📥 **PowerPoint → web** — convert `.pptx`, preserving text, images, order, and notes.
-- 🖨️ **Export** — PDF (`scripts/export-pdf.sh`) or a live **Vercel** URL (`scripts/deploy.sh`).
-- 🖼️ **Fixed 16:9**, animation-rich, accessible, anti-"AI-slop".
+slide-studio fixes that. It still outputs a single, fixed-16:9, zero-dependency `.html` — but that file **carries its own editor in the browser**: double-click to retype, drag to reorder, no code. That's why it's a *studio*, not a generator — after the first pass the deck is still *live*, and you keep shaping it until it's right.
 
-Plus what slide-studio adds:
+It's a superset of [Zara Zhang's frontend-slides](https://github.com/zarazhangrui/frontend-slides): everything that does, plus the editing layer.
 
-- ✍️ **Edit text in place** — click any text, type.
-- 🔤 **Change font size, hierarchy level, and line spacing** — a floating format bar, no code.
-- ↕️ **Reorder / add / delete / duplicate slides** — a drag-and-drop organizer. *(The thing plain decks lack.)*
-- 🤖 **Optional AI backgrounds** — generate cinematic art with your **own** image API. Fully opt-in; CSS
-  gradients look great if you never configure one. No key ships with this repo.
-- 🎬 **Motion** — staggered entrances + a slow Ken-Burns on image slides.
-- ⬇️ **Export a clean standalone `.html`** with your new order/edits/type baked in.
+## What it does
 
-## Install
+### 1. Generate (inherited from frontend-slides)
+
+- From scratch, or turn notes / a doc / a transcript into a deck.
+- Convert PowerPoint (`.pptx`) to web — text, images, order, and notes preserved.
+- Pick a style by *seeing*, not describing: a few title-slide previews to choose from, backed by curated presets and a 34-template bold pack.
+- Fixed 16:9, animated, deliberately not "AI-slop".
+
+### 2. Edit — the part slide-studio adds
+
+Open the generated `.html`; hover the top-left for buttons, or use the keys:
+
+- **`E`** — click any text and retype, like editing a web page.
+- Select text and a format bar appears: **font size, level (display / title / body / caption), line-height, bold, align**.
+- **`O`** — the organizer: drag to reorder (or ↑ ↓), `＋` insert, `⧉` duplicate, `🗑` delete, click a title to jump.
+- Hit **Export HTML** to bake the new order and every edit into a clean single file.
+
+### 3. Art & export
+
+- **`G`** — optional: paste your own image API (Base URL / key / model, stored only in your browser) to generate cinematic backgrounds for a slide. Skip it and CSS gradients look great. **No key ships with this repo.**
+- Export a **PDF** (`scripts/export-pdf.sh`) or deploy a live **Vercel** URL (`scripts/deploy.sh`) that works on phones.
+
+## How to use
 
 ```bash
+# 1. install into your skills dir
 cp -R slide-studio ~/.claude/skills/slide-studio
 ```
 
-Then ask: *"Use slide-studio to make a deck about …"*.
+```text
+# 2. generate — just ask:
+Use slide-studio to make a deck about "…"
 
-## The design rules (why decks look good)
+# 3. refine in the browser (open the generated .html)
+E edit · O reorder · G art · arrows/space to flip · ?s=5 to open on slide 5
 
-Enforced by the skill, documented in [`references/design-rules.md`](references/design-rules.md):
-
-1. **Lock a design system first** — one base color, one text color, one accent; a display + a body font.
-2. **Never bake text into images** — words/numbers/charts are a layer on top; images carry no logos/lettering.
-3. **One shared "style paragraph"** appended to every image prompt → one coherent art direction.
-4. **Compose around the words** — name the empty side, push the subject opposite, keep key elements in the
-   middle two-thirds (edges crop on phones/PDF).
-5. **Bright, legible, semantic** — readable backgrounds, charts in their own panels, colors that mean something.
-6. **Test the first image before batching.**
-
-## Optional: AI background images (opt-in)
-
-The skill **never** generates images unless *you* configure an image API. Two ways:
-
-- **In the browser** — press **`G`** in a deck, paste your OpenAI-compatible **Base URL + key + model**,
-  write a scene, generate. Stored only in your browser's `localStorage`.
-- **Via script**:
-
-```bash
-export IMAGE_API_BASE="https://your-endpoint/v1"
-export IMAGE_API_KEY="sk-..."        # your key — never committed
-export IMAGE_MODEL="gpt-image-2"
-python scripts/gen_image.py "a vast floating city above a sea of clouds, space on the left, no text" out/cover.png
+# 4. finish
+"Export HTML" from the organizer; or run the PDF / Vercel scripts
 ```
 
-See [`references/image-generation.md`](references/image-generation.md).
-
-## Keyboard shortcuts (in a generated deck)
+## Keyboard
 
 | Key | Action |
 |---|---|
-| `←` `→` / `Space` / scroll | Navigate |
-| `E` | Edit mode (then the format bar sets size / level / line-height) |
-| `O` | Organizer — reorder (drag or ↑↓), add, duplicate, delete, **Export HTML** |
-| `G` | Image / API settings (opt-in) |
+| `←` `→` / Space / scroll | Navigate |
+| `E` | Edit text (then the format bar sets size / level / line-height) |
+| `O` | Organizer: reorder · add · duplicate · delete · Export HTML |
+| `G` | Image / API settings (optional) |
 | `?s=5` | Open on slide 5 |
+
+## Why the decks look good
+
+The skill enforces a small set of rules (see [`references/design-rules.md`](references/design-rules.md)): lock a design system first; text always sits *over* images, never baked in; one shared "style paragraph" keeps every image coherent; compose around the empty space; test the first image before batching. Distilled from *Isa does AI*'s guide *"How to Vibe Code AI Slides"*.
 
 ## Credits & License
 
-- Superset of **frontend-slides** (MIT © 2025 Zara Zhang); some files are vendored — see [NOTICE.md](NOTICE.md).
-- Design rules distilled from **"How to Vibe Code AI Slides (Beginner Friendly)"** by *Isa does AI* (independent
-  re-implementation; not affiliated).
+Superset of **frontend-slides** (MIT © 2025 Zara Zhang); its template pack and export scripts are vendored here — see [NOTICE.md](NOTICE.md). Design rules distilled from *Isa does AI* (independent re-implementation).
 
 [MIT](LICENSE) © 2026 Ying-A1

@@ -1,84 +1,78 @@
 # slide-studio
 
-> 用对话让 AI 做出好看、**可编辑**的幻灯片 —— 然后在浏览器里排序、换皮、改字号层级行距，还能（可选）配上 AI 生成的背景。
+把 AI 生成的幻灯片，变成一个还能继续改的工作台——改字、调字号层级行距、拖着排序、增删页、配图、导出，全在浏览器里完成。**生成完，不是终点。**
 
-[English](README.md) · **中文说明**
+[English](README.md) ·  **中文**
 
-`slide-studio` 是一个 [Claude Code / Agent **Skill**](https://docs.claude.com/en/docs/claude-code/skills)。
-它生成**单文件、零依赖、固定 16:9** 的 `.html` 幻灯片，并自带一个真正能用的浏览器内编辑器。
-它是 Zara Zhang 的 [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) 的**超集** ——
-它有的功能全都有，另外补上了纯 HTML 幻灯片一直缺的编辑能力；设计规则取自 YouTube 教程
-*《How to Vibe Code AI Slides》*（作者 **Isa does AI**）。
+---
 
-## 功能
+## 为什么是一个 "Studio"
 
-`frontend-slides` 有的：
+市面上大多数"AI 做 PPT"，生成出来就是一张**死文件**：想挪一页、改个字号、删句话，都得回去重新喂一遍提示词。
 
-- 🧱 **零依赖** —— 一个 HTML 文件，内联 CSS/JS，无需构建。
-- 🎨 **"show, don't tell" 选风格** —— 从生成的可视化预览里挑；内置[预设](references/STYLE_PRESETS.md)
-  + **34 套** [bold 模板包](bold-template-pack/)。
-- 📥 **PowerPoint 转网页** —— 转换 `.pptx`，保留文字、图片、顺序与备注。
-- 🖨️ **导出** —— PDF（`scripts/export-pdf.sh`）或 **Vercel** 在线链接（`scripts/deploy.sh`）。
-- 🖼️ **固定 16:9**、动效丰富、可访问、拒绝"AI 味"。
+slide-studio 想解决的就是这件事。它产出的还是一个单文件、固定 16:9、零依赖的 `.html`——但这个文件**自带一个浏览器里的编辑台**：双击就能改字，拖一下就能换顺序，不用碰一行代码。
 
-slide-studio 另外补上的：
+所以它叫 studio，不叫 generator：一次生成之后，这份 slide 还是"活"的，你可以一直在上面打磨，直到满意为止。
 
-- ✍️ **就地改字** —— 点任意文字直接编辑。
-- 🔤 **改字号 / 层级 / 行距** —— 浮动格式条，不用写代码。
-- ↕️ **排序 / 新增 / 删除 / 复制幻灯片** —— 拖拽式管理面板。*（纯 HTML 幻灯片一直缺这个。）*
-- 🤖 **可选 AI 背景** —— 用你**自己的**图像 API 生成电影感背景。完全可选；不配就用 CSS 渐变，一样好看。仓库里不含任何密钥。
-- 🎬 **动效** —— 错峰入场 + 图片页缓慢 Ken-Burns 推镜。
-- ⬇️ **导出干净的单文件 `.html`**，把新顺序 / 编辑 / 字号都固化进去。
+它是 [Zara Zhang 的 frontend-slides](https://github.com/zarazhangrui/frontend-slides) 的超集——那套能做的它都能做，另外补上了编辑这一层。
 
-## 安装
+## 它能做什么
+
+### 一、生成（这部分来自 frontend-slides）
+
+- 从零开始，或把一段文字、笔记、文稿直接变成一套 slide。
+- 把 PowerPoint（`.pptx`）转成网页，文字、图片、顺序、备注都留着。
+- 选风格靠"看"而不是靠"说"：给你几版首页预览挑，背后是内置预设加 34 套 bold 模板。
+- 固定 16:9、带动效、刻意避开那股"AI 味"。
+
+### 二、编辑（这是 slide-studio 补上的核心）
+
+在浏览器里打开生成的 `.html`，左上角悬停出三个按钮，或用快捷键：
+
+- **按 `E`**——点任意文字直接改，像改网页一样。
+- 选中一段文字，顶部弹出格式条，调 **字号、层级（大标题 / 标题 / 正文 / 小字）、行距、加粗、对齐**。
+- **按 `O`**——排序面板：拖动卡片排序（或 ↑ ↓），`＋` 插入新页、`⧉` 复制、`🗑` 删除、点标题直接跳页。
+- 改完点 **导出 HTML**，把新顺序和所有改动固化成一个干净的单文件带走。
+
+### 三、配图与导出
+
+- **按 `G`**——可选：填上你自己的图像 API（Base URL / Key / Model，只存在本地浏览器），给某一页生成电影感背景；不配也行，用渐变一样好看。**仓库里不含任何密钥。**
+- 导出 **PDF**（`scripts/export-pdf.sh`），或一键部署成 **Vercel** 在线链接（`scripts/deploy.sh`），手机也能看。
+
+## 怎么用
 
 ```bash
+# 1. 装进你的 skills 目录
 cp -R slide-studio ~/.claude/skills/slide-studio
 ```
 
-然后对它说：*"用 slide-studio 做一个关于……的 slide"*。
+```text
+# 2. 让 AI 生成
+对它说：用 slide-studio 做一个关于「……」的 slide
 
-## 设计规则（为什么好看）
+# 3. 在浏览器里打磨（打开生成的 .html）
+E 改字 · O 排序 · G 配图 · 方向键/空格翻页 · ?s=5 直接打开第 5 页
 
-由 Skill 强制执行，详见 [`references/design-rules.md`](references/design-rules.md)：
-
-1. **先定设计系统** —— 一个底色、一个文字色、一个强调色；一个标题字体 + 一个正文字体。
-2. **图里绝不烤字** —— 文字 / 数字 / 图表都叠在图之上；图里不含 logo 或文字。
-3. **一段共用"风格咒语"** 追加到每条生图提示词末尾 → 全套同一种美术风格。
-4. **围绕文字构图** —— 指明空哪一侧、主体推到另一侧、重要元素放画面中间 2/3（手机 / PDF 会裁边）。
-5. **亮、可读、语义化** —— 可读的背景、图表放独立面板、颜色自带含义。
-6. **先出第一张图验证，再批量。**
-
-## 可选：AI 背景图（需自己开启）
-
-除非**你**自己配置了图像 API，Skill 不会生成任何图片。两种方式：
-
-- **浏览器里**：在幻灯片里按 **`G`**，粘贴 OpenAI 兼容的 **Base URL + Key + Model**，写一句画面描述，点生成。
-  配置只存在你本地浏览器的 `localStorage`。
-- **用脚本**：
-
-```bash
-export IMAGE_API_BASE="https://your-endpoint/v1"
-export IMAGE_API_KEY="sk-..."        # 你的密钥 —— 绝不入库
-export IMAGE_MODEL="gpt-image-2"
-python scripts/gen_image.py "云海之上的浮空城，左侧留白，无文字" out/cover.png
+# 4. 收工
+排序面板里「导出 HTML」存成文件；或跑脚本导出 PDF / 部署 Vercel
 ```
 
-详见 [`references/image-generation.md`](references/image-generation.md)。
-
-## 快捷键（在生成的幻灯片里）
+## 快捷键
 
 | 按键 | 作用 |
 |---|---|
 | `←` `→` / 空格 / 滚轮 | 翻页 |
-| `E` | 编辑模式（随后用格式条调字号 / 层级 / 行距） |
-| `O` | 排序面板 —— 拖拽或 ↑↓ 排序、新增、复制、删除、**导出 HTML** |
-| `G` | 图片 / API 设置（可选） |
+| `E` | 编辑文字（选中后用格式条调字号 / 层级 / 行距） |
+| `O` | 排序面板：排序 · 新增 · 复制 · 删除 · 导出 HTML |
+| `G` | 图片 / API 设置（可选，不配也能用） |
 | `?s=5` | 直接打开第 5 页 |
+
+## 设计规则
+
+做出来好看，是因为 Skill 内置了一套规则（详见 [`references/design-rules.md`](references/design-rules.md)）：先定设计系统再做图；文字永远叠在图之上、图里不烤字；一段共用"风格咒语"保证全套统一；围绕留白构图；先出一张图验证再批量。这套规则整理自 *Isa does AI* 的教程《How to Vibe Code AI Slides》。
 
 ## 致谢与许可
 
-- 是 **frontend-slides** 的超集（MIT © 2025 Zara Zhang），并沿用了其部分文件 —— 见 [NOTICE.md](NOTICE.md)。
-- 设计规则取自 *Isa does AI* 的 **《How to Vibe Code AI Slides》**（独立复刻，无从属关系）。
+超集于 **frontend-slides**（MIT © 2025 Zara Zhang），并沿用了其中的模板包与导出脚本，出处与版权见 [NOTICE.md](NOTICE.md)。设计规则取自 *Isa does AI*（独立复刻，无从属关系）。
 
 [MIT](LICENSE) © 2026 Ying-A1
