@@ -1,0 +1,23 @@
+# ---- secrets / local image-API config (NEVER commit) ----
+.env
+.env.*
+*.key
+image-api.json
+slide-studio.config.json
+secrets.json
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ---- language junk ----
+__pycache__/
+*.pyc
+node_modules/
+
+# ---- user output (decks + generated images live next to the user's deck, not here) ----
+/out/
+*.local.html
