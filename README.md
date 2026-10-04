@@ -1,58 +1,42 @@
 # slide-studio
 
-Turn an AI-generated slide deck into something you can keep working on — edit text, change size · level · line-spacing, drag to reorder, add/delete slides, drop in art, export — all in the browser. **Generating it is the start, not the end.**
+A coding-agent skill for making **editable** HTML slide decks — generate a deck from an idea, some notes, or a PowerPoint file, then edit the text, change the type, reorder slides, and add backgrounds right in the browser.
 
 **English** ·  [中文](README.zh-CN.md)
 
----
+## What this does
 
-## Why a "Studio"
+slide-studio produces a single self-contained `.html` file — fixed 16:9, zero dependencies. Unlike a one-shot generator, the file opens with a built-in editor: you keep working on the finished deck — retype text, change font size and spacing, reorder slides, swap backgrounds — without touching code or opening another app.
 
-Most "AI makes your slides" tools hand you a **dead file**: move one slide, change a font size, cut a line — and you're back re-prompting from scratch.
+## Key features
 
-slide-studio fixes that. It still outputs a single, fixed-16:9, zero-dependency `.html` — but that file **carries its own editor in the browser**: double-click to retype, drag to reorder, no code. That's why it's a *studio*, not a generator — after the first pass the deck is still *live*, and you keep shaping it until it's right.
+- **In-browser text editing** — press `E`, click any text, type.
+- **Type controls** — select text and a format bar sets font size, hierarchy level (display / title / body / caption), line-height, weight, and alignment.
+- **Slide organizer** — press `O` to drag-reorder (or ↑ ↓), insert, duplicate, delete, and jump between slides, then export a clean standalone HTML with every change baked in.
+- **Optional AI backgrounds** — press `G` to generate cinematic backgrounds with your own OpenAI-compatible image API. Completely optional; CSS gradients work with no key, and no key ships with this repo.
+- **Visual style discovery** — choose a look from generated title-slide previews, backed by curated presets and a 34-template bold pack, instead of describing your taste in words.
+- **PowerPoint conversion** — turn a `.pptx` into a web deck, preserving text, images, order, and speaker notes.
+- **PDF & live-URL export** — export a PDF, or deploy a shareable Vercel link that works on phones.
+- **Zero dependencies** — one HTML file, inline CSS/JS, works offline, stays 16:9 on every screen.
+- **Distinctive by default** — a built-in design doctrine that avoids generic "AI-slop" layouts.
 
-It's a superset of [Zara Zhang's frontend-slides](https://github.com/zarazhangrui/frontend-slides): everything that does, plus the editing layer.
-
-## What it does
-
-### 1. Generate (inherited from frontend-slides)
-
-- From scratch, or turn notes / a doc / a transcript into a deck.
-- Convert PowerPoint (`.pptx`) to web — text, images, order, and notes preserved.
-- Pick a style by *seeing*, not describing: a few title-slide previews to choose from, backed by curated presets and a 34-template bold pack.
-- Fixed 16:9, animated, deliberately not "AI-slop".
-
-### 2. Edit — the part slide-studio adds
-
-Open the generated `.html`; hover the top-left for buttons, or use the keys:
-
-- **`E`** — click any text and retype, like editing a web page.
-- Select text and a format bar appears: **font size, level (display / title / body / caption), line-height, bold, align**.
-- **`O`** — the organizer: drag to reorder (or ↑ ↓), `＋` insert, `⧉` duplicate, `🗑` delete, click a title to jump.
-- Hit **Export HTML** to bake the new order and every edit into a clean single file.
-
-### 3. Art & export
-
-- **`G`** — optional: paste your own image API (Base URL / key / model, stored only in your browser) to generate cinematic backgrounds for a slide. Skip it and CSS gradients look great. **No key ships with this repo.**
-- Export a **PDF** (`scripts/export-pdf.sh`) or deploy a live **Vercel** URL (`scripts/deploy.sh`) that works on phones.
-
-## How to use
+## Install
 
 ```bash
-# 1. install into your skills dir
 cp -R slide-studio ~/.claude/skills/slide-studio
 ```
 
+## Use
+
 ```text
-# 2. generate — just ask:
+# generate — just ask:
 Use slide-studio to make a deck about "…"
 
-# 3. refine in the browser (open the generated .html)
-E edit · O reorder · G art · arrows/space to flip · ?s=5 to open on slide 5
+# refine — open the generated .html and:
+E  edit text        O  reorder / add / delete slides
+G  AI backgrounds   ← → / Space  navigate        ?s=5  open on slide 5
 
-# 4. finish
-"Export HTML" from the organizer; or run the PDF / Vercel scripts
+# finish — "Export HTML" in the organizer, or run the PDF / Vercel scripts
 ```
 
 ## Keyboard
@@ -67,10 +51,10 @@ E edit · O reorder · G art · arrows/space to flip · ?s=5 to open on slide 5
 
 ## Why the decks look good
 
-The skill enforces a small set of rules (see [`references/design-rules.md`](references/design-rules.md)): lock a design system first; text always sits *over* images, never baked in; one shared "style paragraph" keeps every image coherent; compose around the empty space; test the first image before batching. Distilled from *Isa does AI*'s guide *"How to Vibe Code AI Slides"*.
+A built-in set of rules (see [`references/design-rules.md`](references/design-rules.md)): lock a design system first; keep text as a layer over images, never baked in; reuse one "style paragraph" so every image matches; compose around the empty space; test the first image before generating the rest.
 
-## Credits & License
+## Credits & license
 
-Superset of **frontend-slides** (MIT © 2025 Zara Zhang); its template pack and export scripts are vendored here — see [NOTICE.md](NOTICE.md). Design rules distilled from *Isa does AI* (independent re-implementation).
+Builds on **frontend-slides** (MIT © 2025 Zara Zhang) — its template pack and export scripts are included here, with attribution in [NOTICE.md](NOTICE.md). The design rules are distilled from *"How to Vibe Code AI Slides"* by *Isa does AI*.
 
 [MIT](LICENSE) © 2026 Ying-A1
