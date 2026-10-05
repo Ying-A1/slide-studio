@@ -185,6 +185,8 @@ blockquote.sm{font-size:52px;line-height:1.6}.p.ink blockquote{color:var(--paper
 .demo-pane.dark-pane .demo-micro{color:rgba(244,243,240,.62)}
 .demo-file{font-size:18px;letter-spacing:.04em;margin-top:28px;color:var(--muted)}
 .demo-pane.dark-pane .demo-file{color:rgba(244,243,240,.7)}
+.demo-link{display:inline-flex;align-items:center;gap:10px;margin-top:28px;color:inherit;font-family:var(--f-num);font-size:20px;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:5px}
+.demo-link::after{content:"↗";font-size:18px}
 @media(max-width:900px){.demo-grid{grid-template-columns:1fr;gap:28px;margin-top:34px}.demo-card{display:none}.demo-two-col{grid-template-columns:1fr}.demo-pane{min-height:230px}.demo-pane p{font-size:30px}}
 /*==CSS_END==*/
 </style>
@@ -260,6 +262,7 @@ blockquote.sm{font-size:52px;line-height:1.6}.p.ink blockquote{color:var(--paper
       <div class="big an" style="animation-delay:.14s">现在，按 <span class="em">E</span> 改掉这句话。</div>
       <div class="subline an" style="animation-delay:.3s">改完按 O 打开面板，拖动一页，再点「导出 HTML」。按 G 可以试试背景设置；渐变不需要任何密钥。</div>
       <div class="demo-export demo-export-light an" style="animation-delay:.42s">你的下一份 live deck，从这里开始</div>
+      <a class="demo-link an" style="animation-delay:.54s" href="https://github.com/Ying-A1/slide-studio" target="_blank" rel="noreferrer">查看源代码 · 提交反馈 · 给项目加 Star</a>
     </div></div></section>
 
     <div class="pagenum" id="counter">01 / 05</div>
