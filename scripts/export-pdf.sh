@@ -227,32 +227,34 @@ for (let i = 0; i < slideCount; i++) {
   // Navigate to slide by simulating the presentation's navigation
   // Most frontend-slides presentations use a currentSlide index and show/hide
   await page.evaluate((index) => {
-    const slides = document.querySelectorAll('.slide');
+    const slides = [...document.querySelectorAll('.slide')];
 
-    // Try multiple navigation strategies used by frontend-slides:
-
-    // Strategy 1: Direct slide manipulation (most common in generated decks)
-    slides.forEach((slide, idx) => {
-      if (idx === index) {
-        slide.style.display = '';
-        slide.style.opacity = '1';
-        slide.style.visibility = 'visible';
-        slide.style.position = 'relative';
-        slide.style.transform = 'none';
-        slide.classList.add('active');
-      } else {
-        slide.style.display = 'none';
-        slide.classList.remove('active');
-      }
-    });
-
-    // Strategy 2: If there's a SlidePresentation class instance, use it
+    // Try a presentation-provided navigation hook first when one exists.
     if (window.presentation && typeof window.presentation.goToSlide === 'function') {
       window.presentation.goToSlide(index);
     }
 
-    // Strategy 3: Scroll-based (some decks use scroll snapping)
+    // Give scroll-based decks a chance to update their current-slide state
+    // before applying the final export state below.
     slides[index]?.scrollIntoView({ behavior: 'instant' });
+
+    // The slide engine uses both classes to control visibility and to trigger
+    // entrance animations. Keep every slide in the fixed stage and switch
+    // state through the engine's classes instead of display:none, which can
+    // change layout and prevent the current slide from becoming visible.
+    slides.forEach((slide, idx) => {
+      const isCurrent = idx === index;
+      slide.classList.toggle('active', isCurrent);
+      slide.classList.toggle('visible', isCurrent);
+
+      // Clear inline state left by a previous navigation pass so the authored
+      // fixed-stage CSS remains the source of truth for positioning/layout.
+      slide.style.removeProperty('display');
+      slide.style.removeProperty('opacity');
+      slide.style.removeProperty('visibility');
+      slide.style.removeProperty('position');
+      slide.style.removeProperty('transform');
+    });
   }, i);
 
   // Wait for any slide transition animations to finish
@@ -261,13 +263,16 @@ for (let i = 0; i < slideCount; i++) {
   // Wait for intersection observer animations to trigger
   await page.waitForTimeout(200);
 
-  // Force all .reveal elements on the current slide to be visible
-  // (animations normally trigger on scroll/intersection, but we need them visible now)
+  // Force animated content on the current slide to its settled state.
+  // The template uses `.visible` to start `.an`, `.pop`, and bullet
+  // animations; waiting for a fixed duration would make long-delay elements
+  // intermittently disappear from the exported page.
   await page.evaluate((index) => {
     const slides = document.querySelectorAll('.slide');
     const currentSlide = slides[index];
     if (currentSlide) {
-      currentSlide.querySelectorAll('.reveal').forEach(el => {
+      currentSlide.querySelectorAll('.an, .pop, .points li, .reveal').forEach(el => {
+        el.style.animation = 'none';
         el.style.opacity = '1';
         el.style.transform = 'none';
         el.style.visibility = 'visible';

@@ -1,0 +1,58 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check inline JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+
+          files = [Path('assets/deck-template.html'), Path('demo/slide-studio-demo.html'), Path('index.html')]
+          with tempfile.TemporaryDirectory() as d:
+              for source in files:
+                  html = source.read_text(encoding='utf-8')
+                  scripts = re.findall(r'<script(?:[^>]*)>(.*?)</script>', html, flags=re.S)
+                  if not scripts:
+                      raise SystemExit(f'{source}: no inline script found')
+                  for i, script in enumerate(scripts, 1):
+                      target = Path(d) / f'{source.stem}-{i}.js'
+                      target.write_text(script, encoding='utf-8')
+                      subprocess.run(['node', '--check', str(target)], check=True)
+          PY
+      - name: Check shell and Python syntax
+        run: |
+          bash -n scripts/*.sh
+          python3 -m py_compile scripts/*.py
+      - name: Check demo structure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          for name in ['index.html', 'demo/slide-studio-demo.html', 'assets/deck-template.html']:
+              html = Path(name).read_text(encoding='utf-8')
+              slides = len(re.findall(r'<section class="slide(?:\s|\")', html))
+              if slides < 1:
+                  raise SystemExit(f'{name}: expected at least one .slide')
+              for needle in ['id="deckStage"', 'id="counter"', "id='org'"]:
+                  if needle not in html:
+                      raise SystemExit(f'{name}: missing {needle}')
+          PY

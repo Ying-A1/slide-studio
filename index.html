@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>slide-studio · deck</title>
+<title>slide-studio · live demo</title>
+<meta name="description" content="slide-studio live demo：打开、编辑、重排并导出一份可继续工作的 HTML 幻灯片。">
 <!-- slide-studio template. Headings: Noto Sans SC + Space Grotesk. Body/quotes: LXGW WenKai (楷体). -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,6 +160,32 @@ blockquote.sm{font-size:52px;line-height:1.6}.p.ink blockquote{color:var(--paper
 #imgPanel .note{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 #imgPanel .status{font-size:12px;margin-top:10px;min-height:16px;color:var(--muted)}
 #imgPanel .status.err{color:#c0392b}#imgPanel .status.ok{color:#1e7a46}
+/* ============ public demo layer ============ */
+.demo-cover .p{padding-top:92px}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(380px,.75fr);gap:74px;align-items:end;margin-top:62px}
+.demo-card{padding:34px 38px 30px;border:1px solid rgba(244,243,240,.26);border-radius:20px;background:rgba(10,10,14,.36);backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(0,0,0,.24)}
+.demo-card-label,.demo-card-title,.demo-note,.demo-file,.demo-export-label{font-family:var(--f-num)}
+.demo-card-label,.demo-export-label{font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,243,240,.62)}
+.demo-card-title{font-size:29px;font-weight:600;letter-spacing:.02em;color:#f6f5f2;margin:18px 0 24px}
+.demo-keyrow{display:flex;align-items:center;gap:16px;padding:12px 0;border-top:1px solid rgba(244,243,240,.18);font-family:var(--f-num);font-size:23px;color:rgba(244,243,240,.9)}
+.demo-keycap{display:inline-flex;align-items:center;justify-content:center;min-width:45px;height:42px;padding:0 12px;border:1px solid currentColor;border-radius:9px;font-family:var(--f-num);font-size:19px;font-weight:700;letter-spacing:.08em}
+.demo-card .demo-note{font-size:16px;line-height:1.5;color:rgba(244,243,240,.56);margin-top:20px}
+.demo-export{display:inline-flex;align-items:center;gap:14px;margin-top:20px;padding:13px 17px;border-radius:9px;background:var(--ink);color:#fff;font-family:var(--f-num);font-size:18px;font-weight:600;letter-spacing:.02em}
+.demo-export::before{content:"↓";font-size:22px;line-height:1}
+.demo-export-light{background:rgba(22,22,24,.08);color:var(--ink)}
+.demo-export-light::before{color:var(--muted)}
+.demo-micro{font-family:var(--f-num);font-size:20px;line-height:1.55;color:var(--muted)}
+.demo-micro b{color:var(--ink);font-weight:700}
+.demo-two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0;margin-top:38px}
+.demo-pane{padding:36px 42px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;min-height:350px}
+.demo-pane.dark-pane{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.demo-pane .h{margin-bottom:26px}
+.demo-pane p{font-family:var(--f-body);font-size:38px;line-height:1.5;color:inherit}
+.demo-pane .demo-micro{color:var(--muted)}
+.demo-pane.dark-pane .demo-micro{color:rgba(244,243,240,.62)}
+.demo-file{font-size:18px;letter-spacing:.04em;margin-top:28px;color:var(--muted)}
+.demo-pane.dark-pane .demo-file{color:rgba(244,243,240,.7)}
+@media(max-width:900px){.demo-grid{grid-template-columns:1fr;gap:28px;margin-top:34px}.demo-card{display:none}.demo-two-col{grid-template-columns:1fr}.demo-pane{min-height:230px}.demo-pane p{font-size:30px}}
 /*==CSS_END==*/
 </style>
 </head>
@@ -171,45 +198,68 @@ blockquote.sm{font-size:52px;line-height:1.6}.p.ink blockquote{color:var(--paper
 <div class="deck-viewport">
   <main class="deck-stage" id="deckStage">
 
-    <!-- COVER -->
-    <section class="slide cover dark active">
-      <div class="bg" style="background:linear-gradient(135deg,#15161c,#352a3d 55%,#6d4a4f)"></div>
+    <!-- COVER: public demo entry -->
+    <section class="slide cover dark active demo-cover">
+      <div class="bg" style="background:radial-gradient(circle at 82% 18%,#6f475a 0,#3b2e47 28%,transparent 58%),linear-gradient(135deg,#111217 0%,#1b1a25 54%,#28212d 100%)"></div>
       <div class="frame"><div class="p grow" style="display:flex;flex-direction:column;justify-content:center">
-        <div class="kicker an">slide-studio · 模板</div>
-        <h1 class="display an" style="animation-delay:.12s;margin-top:44px">在这里<mark>写标题</mark></h1>
-        <div class="lead an" style="animation-delay:.3s;margin-top:52px">会讲故事、能编辑、可排序、可配图的幻灯片</div>
+        <div class="kicker an">slide-studio · live demo</div>
+        <div class="demo-grid">
+          <div>
+            <h1 class="display an" style="animation-delay:.12s">生成完，<br><mark>不是终点。</mark></h1>
+            <div class="lead an" style="animation-delay:.3s;margin-top:48px">这是一个能继续工作的 HTML 幻灯片：打开就能改，改完就能带走。</div>
+          </div>
+          <aside class="demo-card an" style="animation-delay:.42s" aria-label="开始体验">
+            <div class="demo-card-label">TRY IT NOW</div>
+            <div class="demo-card-title">按一个键开始</div>
+            <div class="demo-keyrow"><span class="demo-keycap">E</span><span>编辑文字</span></div>
+            <div class="demo-keyrow"><span class="demo-keycap">O</span><span>排序、增删、导出</span></div>
+            <div class="demo-keyrow"><span class="demo-keycap">G</span><span>设置背景（可选）</span></div>
+            <div class="demo-note">方向键 / 空格翻页　·　无需构建步骤</div>
+          </aside>
+        </div>
       </div></div>
     </section>
 
     <!-- SECTION DIVIDER -->
     <section class="slide divider"><div class="frame"><div class="p grow" style="display:flex;flex-direction:column;justify-content:center">
       <div class="dnum pop">01</div>
-      <div class="dtitle an" style="animation-delay:.18s">第一章 · 标题</div>
-      <div class="dtag an" style="animation-delay:.34s">一句话说明这一章讲什么</div>
+      <div class="dtitle an" style="animation-delay:.18s">生成，只是第一步</div>
+      <div class="dtag an" style="animation-delay:.34s">slide-studio 把文件留在你的手里：它仍然能编辑、能重排、能继续长大。</div>
     </div></div></section>
 
-    <!-- CONTENT -->
+    <!-- FEATURES: keyboard-first product tour -->
     <section class="slide"><div class="frame"><div class="p grow" style="display:flex;flex-direction:column;justify-content:center">
-      <div class="row an" style="justify-content:space-between;align-items:center;margin-bottom:44px"><span class="kicker">要点</span><span class="tag">POINTS</span></div>
-      <h2 class="title an" style="animation-delay:.14s;margin-bottom:44px">一页放一个<mark>观点</mark></h2>
+      <div class="row an" style="justify-content:space-between;align-items:center;margin-bottom:42px"><span class="kicker">TRY THE CONTROLS</span><span class="tag">E · O · G</span></div>
+      <h2 class="title an" style="animation-delay:.14s;margin-bottom:42px">三个按键，把文件变成<mark>工作台</mark></h2>
       <ul class="points dot tight">
-        <li><b>按 E</b>　进入编辑：点任意文字直接改；选中文字后用顶部格式条调字号 / 层级 / 行距</li>
-        <li><b>按 O</b>　打开排序面板：拖动卡片排序，＋ 插入、⧉ 复制、🗑 删除，改完「导出 HTML」</li>
-        <li><b>按 G</b>　可选：配置你自己的图片 API，给某页生成电影感背景（也可以不配，用渐变底）</li>
+        <li><b>按 E</b>　直接改字；选中文字后，用格式条调整字号、层级、行距、粗细和对齐。</li>
+        <li><b>按 O</b>　拖动排序，插入、复制、删除页面；最后点「导出 HTML」，把改动打包成一份干净文件。</li>
+        <li><b>按 G</b>　给当前页换渐变或图片链接；也可以填入你自己的 OpenAI 兼容接口生成背景，不配 Key 也能用。</li>
       </ul>
     </div></div></section>
-    <!-- QUOTE (full-bleed ink) -->
-    <section class="slide"><div class="frame"><div class="p ink grow qwrap">
-      <span class="qbadge an">引文</span>
-      <blockquote class="an" style="animation-delay:.12s">把最有力的<span class="em">原话</span>放大，<br>让它独占一页。</blockquote>
-      <div class="cite an" style="animation-delay:.32s">出处 · 作者</div>
+
+    <!-- EXPORT: make the path to a shareable artifact concrete -->
+    <section class="slide"><div class="frame"><div class="p grow" style="display:flex;flex-direction:column">
+      <div class="row an" style="justify-content:space-between;align-items:center"><span class="kicker">FROM EDIT TO SHARE</span><span class="tag">ONE FILE</span></div>
+      <h2 class="title an" style="animation-delay:.14s;margin-top:44px;max-width:1500px">改完，带走一个<mark>可分享的 HTML</mark></h2>
+      <div class="demo-two-col an" style="animation-delay:.3s">
+        <div class="demo-pane">
+          <div><div class="h">01 / EDIT IN PLACE</div><p>内容留在 HTML 里。<br>打开、修改、保存，<br>不用回到代码编辑器。</p></div>
+          <div class="demo-micro"><b>O</b>　打开排序面板</div>
+        </div>
+        <div class="demo-pane dark-pane">
+          <div><div class="h">02 / EXPORT CLEAN</div><p>点「导出 HTML」，<br>带走一份独立文件。<br>邮件、网盘、Vercel 都能继续用。</p><div class="demo-export">导出 HTML</div></div>
+          <div class="demo-file">slide-studio-demo.html</div>
+        </div>
+      </div>
     </div></div></section>
 
-    <!-- CLOSING -->
+    <!-- CLOSING: clear next action -->
     <section class="slide closing"><div class="frame"><div class="p grow" style="display:flex;flex-direction:column;justify-content:center">
-      <span class="qbadge an">结语</span>
-      <div class="big an" style="animation-delay:.14s">用一句话<span class="em">收束</span>整场。</div>
-      <div class="subline an" style="animation-delay:.34s">这是模板自带的 5 页示例 — 复制本文件，改 :root 主题与下面的 &lt;section&gt; 即可。</div>
+      <span class="qbadge an">START HERE</span>
+      <div class="big an" style="animation-delay:.14s">现在，按 <span class="em">E</span> 改掉这句话。</div>
+      <div class="subline an" style="animation-delay:.3s">改完按 O 打开面板，拖动一页，再点「导出 HTML」。按 G 可以试试背景设置；渐变不需要任何密钥。</div>
+      <div class="demo-export demo-export-light an" style="animation-delay:.42s">你的下一份 live deck，从这里开始</div>
     </div></div></section>
 
     <div class="pagenum" id="counter">01 / 05</div>
